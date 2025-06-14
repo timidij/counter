@@ -25,23 +25,23 @@
 
 
 // task 2.1
-function CounterPrototype (value){
+function CounterPrototype  (value){
     
         this.count = value
         this.initialValue = value
     
 }
 
-CounterPrototype.prototype.increment=function (){
+CounterPrototype.prototype.increment= function (){
 return this.count++
 }
 
-CounterPrototype.prototype.decrement=function (){
+CounterPrototype.prototype.decrement = function (){
 return this.count--
 }
 
 
-CounterPrototype.prototype.getValue =function (){
+CounterPrototype.prototype.getValue = function (){
 return this.count
 }
 CounterPrototype.prototype.reset = function (){
@@ -89,14 +89,15 @@ console.log(v1.increment())
 console.log(v2.reset())
 
 // task 5.1
-const power = (e) =>{
-        let value = e*2
-        return value
-    }
+
 
 createCounter.prototype.transform = function (count){
 
-     return count
+
+    const newCount = transformFn(this.count);
+
+    this.count = newCount;
+    return this.count;
     
 }
 
@@ -105,29 +106,49 @@ createCounter.prototype.transform = function (count){
 // task 5.2
 
 createCounter.prototype.createPredicate = function (){
-    function checking (threshold){
+    const checking =(threshold)=>{
         
-        console.log(this.count)
-        if(this.count >= threshold){
-
-            console.log(this.count)
-            return true
-        }
-        // console.log(this.count)
-        // return false
+        return this.count >= threshold
+        
     }
     // return true
     return checking
 }
-// console.log(isAboveThreshold(4))
 
+// console.log(isAboveThreshold(4))
 
 // task 6 
 createCounter.prototype.add = function (value){
     return this.count + value
 }
 
+createCounter.prototype.subtract = function (value){
+    return this.count - value
+}
+
+createCounter.prototype.multiply = function (value){
+    return this.count * value
+}
+createCounter.prototype.snapshot = function (){
+    return this.count
+}
+createCounter.prototype.batch = function ({ increments = 0, decrements = 0 }) {
+    this.count += increments;
+    this.count -= decrements;
+
+    
+
+    return this.count; 
+};
+
 const peep = new createCounter(5)
-// console.log(peep.add(5))
+console.log(peep.add(20))
+console.log(peep.snapshot())
+console.log(peep.batch({increments:100}))
 const isAboveThreshold = peep.createPredicate()
-console.log(isAboveThreshold(0))
+console.log(isAboveThreshold(100))
+
+const createAdvancedCounter =({config}) => {
+// {initialValue,step, min, max} = config
+
+}
