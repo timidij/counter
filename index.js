@@ -1,27 +1,20 @@
 // task 1
 
-// class createCounter {
-//     constructor(count){
-//         this.count = count
-//     }
-//     increment(){
-//         return this.count++
-//     }
-//     decrement(){
-//         return this.count--
-//     }
-//     getValue(){
-//         return this.count
-//     }
-// }
-// const counter1 = new createCounter(0)
-// const counter2 = new createCounter(10)
+function createCounters(val){
+    this.count= val
+    return {
+        increment(){
+            return this.count++
+        },
+        decrement(){
+            return this.count--
+        },
+        getValue(){
+            return this.count
+        }
+    }
+    }
 
-// counter1.increment()
-// counter1.increment()
-// counter2.decrement()
-// console.log(counter1.getValue())
-// console.log(counter2.getValue())
 
 
 // task 2.1
@@ -48,13 +41,6 @@ CounterPrototype.prototype.reset = function (){
 return this.count = this.initialValue
 }
 
-
-
-const p1 = new CounterPrototype(3)
-p1.increment()
-console.log(p1.getValue())
-p1.reset()
-console.log(p1.getValue())
 
 // Task 3
 function createCounter(initialValue = 0){
@@ -83,15 +69,12 @@ createCounter.prototype.reset = function (){
     return this.count
 }
 
-const v1 = new createCounter(4)
-const v2 = new createCounter(8)
-console.log(v1.increment())
-console.log(v2.reset())
+
 
 // task 5.1
 
 
-createCounter.prototype.transform = function (count){
+createCounter.prototype.transform = function (transformFn){
 
 
     const newCount = transformFn(this.count);
@@ -101,7 +84,6 @@ createCounter.prototype.transform = function (count){
     
 }
 
-// console.log(v2.transform(power(this.count)))
 
 // task 5.2
 
@@ -115,7 +97,7 @@ createCounter.prototype.createPredicate = function (){
     return checking
 }
 
-// console.log(isAboveThreshold(4))
+
 
 // task 6 
 createCounter.prototype.add = function (value){
@@ -136,10 +118,66 @@ createCounter.prototype.batch = function ({ increments = 0, decrements = 0 }) {
     this.count += increments;
     this.count -= decrements;
 
-    
-
     return this.count; 
 };
+
+
+
+function createAdvancedCounter(config) {
+    this._config = {
+        initialValue: config && config.initialValue !== undefined ? config.initialValue : 0,
+        step: config && config.step !== undefined ? config.step : 1,
+        min: config && config.min !== undefined ? config.min : -Infinity,
+        max: config && config.max !== undefined ? config.max : Infinity
+    };
+
+    this.count = Math.max(this._config.min, Math.min(this._config.initialValue, this._config.max));
+}
+
+createAdvancedCounter.prototype.increment = function () {
+    const newCount = this.count + this._config.step;
+    this.count = Math.min(newCount, this._config.max);
+    return this.count;
+};
+
+
+createAdvancedCounter.prototype.decrement = function () {
+    const newCount = this.count - this._config.step;
+    this.count = Math.max(newCount, this._config.min);
+    return this.count;
+};
+
+
+createAdvancedCounter.prototype.getValue = function () {
+    return this.count;
+};
+
+createAdvancedCounter.prototype.reset = function () {
+    this.count = Math.max(this._config.min, Math.min(this._config.initialValue, this._config.max));
+    return this.count;
+};
+
+createAdvancedCounter.prototype.getConfig = function () {
+    return { ...this._config };
+};
+const v1 = new createCounter(4)
+const v2 = new createCounter(8)
+
+//increment and decrement
+console.log("increment and decrement")
+console.log(v2.increment())
+console.log(v1.decrement())
+
+console.log(v2.reset())
+
+//higher order function
+console.log("higher order function")
+console.log(v1.transform(x=>x*2))
+
+console.log("immutables")
+console.log(v1.add(5))
+console.log(`for multiply ${v1.multiply(8)}`)
+console.log(v1.getValue())
 
 const peep = new createCounter(5)
 console.log(peep.add(20))
@@ -147,8 +185,3 @@ console.log(peep.snapshot())
 console.log(peep.batch({increments:100}))
 const isAboveThreshold = peep.createPredicate()
 console.log(isAboveThreshold(100))
-
-const createAdvancedCounter =({config}) => {
-// {initialValue,step, min, max} = config
-
-}
